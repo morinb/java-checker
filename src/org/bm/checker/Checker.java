@@ -9,8 +9,11 @@ public class Checker<T> {
 
    private final List<DataChecker<T>> checkers;
 
+   private final List<CheckError> errors;
+
    public Checker() {
       checkers = new LinkedList<DataChecker<T>>();
+      errors = new LinkedList<CheckError>();
    }
 
    /**
@@ -29,12 +32,14 @@ public class Checker<T> {
       return this;
    }
 
-   public boolean check() {
-      boolean result = false;
+   public List<CheckError> check() {
       for (DataChecker<T> checker : checkers) {
-         result &= checker.check(getter.get());
+         CheckError error = checker.check(getter.get());
+         if (null != error) {
+            errors.add(error);
+         }
       }
 
-      return result;
+      return errors;
    }
 }

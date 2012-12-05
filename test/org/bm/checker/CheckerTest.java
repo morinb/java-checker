@@ -1,5 +1,7 @@
 package org.bm.checker;
 
+import java.util.List;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -9,24 +11,23 @@ public class CheckerTest {
    @Test
    public void testCheck() {
 
-      boolean isLowerAndGreaterThan10 = Checker.<Integer> with(new DataGetter<Integer>() {
+      List<CheckError> checks = Checker.<Integer> with(new DataGetter<Integer>() {
          @Override
          public Integer get() {
             return 12;
          }
       }).addChecker(new DataChecker<Integer>() {
          @Override
-         public boolean check(Integer object) {
-            return object < 10;
-         }
-      }).addChecker(new DataChecker<Integer>() {
-         @Override
-         public boolean check(Integer object) {
-            return object > 10;
+         public CheckError check(Integer object) {
+            if (object >= 10) {
+               return new CheckError("Number is greater that 10 !");
+            }
+
+            return null;
          }
       }).check();
 
-      Assert.assertEquals(false, isLowerAndGreaterThan10);
-
+      Assert.assertEquals(1, checks.size()); // 1 error, because 12 >= 10 !
+      System.out.println(checks.get(0).getMessage());
    }
 }
