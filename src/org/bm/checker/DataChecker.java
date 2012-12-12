@@ -1,9 +1,9 @@
 package org.bm.checker;
 
-public interface DataChecker<T> {
+public interface DataChecker<T, E> {
    /**
     * @param object
     * @return a CheckError object, or null, if there is no problem. 
     */
-   CheckError check(T object);
+   CheckError<E> check(T object);
 }
