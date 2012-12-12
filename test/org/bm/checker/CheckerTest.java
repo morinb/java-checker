@@ -4,8 +4,6 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-import org.bm.checker.impl.IsNotNullAndNotEmptyDataChecker;
-import org.bm.checker.impl.ValueInListDataChecker;
 import org.junit.Test;
 
 public class CheckerTest {
@@ -30,47 +28,6 @@ public class CheckerTest {
       });
 
       Assert.assertEquals(1, checks.size()); // 1 error, because 12 >= 10 !
-      System.out.println(checks.get(0).getMessage());
-   }
-
-   @Test
-   public void testImpl() {
-      List<CheckError<String>> checks = Checker.<String, String> get()
-         .addChecker(new ValueInListDataChecker(true, "1", "3", "5")).check(new DataGetter<String>() {
-            @Override
-            public String get() {
-               return "5";
-            }
-         });
-
-      Assert.assertEquals(0, checks.size()); // 0 error, because 5 is in the list
-   }
-
-   @Test
-   public void testImpl2() {
-      List<CheckError<String>> checks = Checker.<String, String> get()
-         .addChecker(new ValueInListDataChecker(true, "1", "3", "5")).check(new DataGetter<String>() {
-            @Override
-            public String get() {
-               return "7";
-            }
-         });
-
-      Assert.assertEquals(1, checks.size()); // 1 error, because 7 is not in the list
-      System.out.println(checks.get(0).getMessage());
-   }
-
-   @Test
-   public void testNullOrEmpty() {
-      List<CheckError<String>> checks = Checker.<String, String> get().addChecker(new IsNotNullAndNotEmptyDataChecker())
-         .check(new DataGetter<String>() {
-            @Override
-            public String get() {
-               return null;
-            }
-         });
-
-      Assert.assertEquals(1, checks.size()); // 1 error, becauseobject is null
       System.out.println(checks.get(0).getMessage());
    }
 
