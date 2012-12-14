@@ -17,7 +17,7 @@ public class TestChecker2 {
             @Override
             public ReasonCode check(MultiData object) {
                if (object.text.isEmpty()) {
-                  return ReasonCode._0001;
+                  return ReasonCode._0001.setCheckedValue(object.text);
                }
                Character c = Character.valueOf(object.text.charAt(0));
                this.addData("FirstChar", c);
@@ -28,7 +28,7 @@ public class TestChecker2 {
             @Override
             public ReasonCode check(MultiData object) {
                if (object.number < 0) {
-                  return ReasonCode._0002;
+                  return ReasonCode._0002.setCheckedValue(object.number);
                }
                return null;
             }
@@ -37,7 +37,7 @@ public class TestChecker2 {
             @Override
             public ReasonCode check(MultiData object) {
                if ('Y' != object.flag && 'N' != object.flag) {
-                  return ReasonCode._0003;
+                  return ReasonCode._0003.setCheckedValue(object.flag);
                }
                return null;
             }
@@ -48,7 +48,7 @@ public class TestChecker2 {
                Character c = (Character) this.getData("FirstChar");
 
                if (c == null || !c.equals(Character.valueOf('H'))) {
-                  return ReasonCode._0004;
+                  return ReasonCode._0004.setCheckedValue(c);
                }
                return null;
             }
@@ -82,7 +82,7 @@ public class TestChecker2 {
       for (ReasonCode r : checksKO) {
          System.out.println(r.getMessage());
       }
-      Assert.assertEquals(3, checksKO.size());
+      Assert.assertEquals(checkerManager.countChecks(), checksKO.size());
 
    }
 }
@@ -108,6 +108,8 @@ class ReasonCode implements Comparable<ReasonCode> {
 
    private final int p;
 
+   private Object value;
+
    public ReasonCode(int priority, String string) {
       this.p = priority;
       m = string;
@@ -115,11 +117,19 @@ class ReasonCode implements Comparable<ReasonCode> {
    }
 
    public String getMessage() {
+      if (null != value) {
+         return m + " >>" + value + "<<";
+      }
       return m;
    }
 
    public int getPriority() {
       return p;
+   }
+
+   public ReasonCode setCheckedValue(Object value) {
+      this.value = value;
+      return this;
    }
 
    @Override

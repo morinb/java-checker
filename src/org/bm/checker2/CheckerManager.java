@@ -41,6 +41,19 @@ public class CheckerManager<C, R> {
       return this;
    }
 
+   public void addData(String key, Object value) {
+      if (dataMap != null) {
+         dataMap.put(key, value);
+      }
+   }
+
+   public Object getData(String key) {
+      if (dataMap != null) {
+         return dataMap.get(key);
+      }
+      return null;
+   }
+
    public List<R> check(C object) {
       dataMap.clear();
       if (checkList.isEmpty()) {
@@ -57,6 +70,10 @@ public class CheckerManager<C, R> {
       }
 
       return results;
+   }
+
+   public int countChecks() {
+      return checkList.size();
    }
 
 }
